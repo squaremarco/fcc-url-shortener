@@ -35,7 +35,11 @@ app.post('/api/shorturl/new', async function (req, res) {
 
   if (!isWebUri(original_url)) return res.json({ error: 'invalid url' });
 
-  const short_url = nanoid(8);
+  let short_url = nanoid(8);
+
+  while (await getAsync(short_url)) {
+    short_url = nanoid(8);
+  }
 
   const ret = await setAsync(short_url, original_url);
 
