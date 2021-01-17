@@ -21,16 +21,15 @@ const setAsync = promisify(db.set).bind(db);
 // Basic Configuration
 const port = process.env.EXPRESS_PORT;
 
-app.use(cors());
+app.use(cors({ optionsSuccessStatus: 200 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/public', express.static(`${process.cwd()}/public`));
+app.use(express.static('public'));
 
-app.get('/', function (_, res) {
-  res.sendFile(process.cwd() + '/views/index.html');
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/views/index.html');
 });
 
-// Your first API endpoint
 app.post('/api/shorturl/new', async function (req, res) {
   const { url: original_url } = req.body || {};
 
