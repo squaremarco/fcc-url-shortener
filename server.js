@@ -4,7 +4,7 @@ const cors = require('cors');
 const redis = require('redis');
 const bodyParser = require('body-parser');
 const { nanoid } = require('nanoid');
-const { isUri } = require('valid-url');
+const { isWebUri } = require('valid-url');
 const { promisify } = require('util');
 
 const app = express();
@@ -33,7 +33,7 @@ app.get('/', function (req, res) {
 app.post('/api/shorturl/new', async function (req, res) {
   const { url: original_url } = req.body || {};
 
-  if (!isUri(original_url)) return res.json({ error: 'invalid url' });
+  if (!isWebUri(original_url)) return res.json({ error: 'invalid url' });
 
   const short_url = nanoid(8);
 
@@ -49,7 +49,7 @@ app.get('/api/shorturl/:short_url', async function (req, res) {
 
   const original_url = await getAsync(short_url);
 
-  if (!original_url || !isUri(original_url)) return res.json({ error: 'invalid url' });
+  if (!original_url) return res.json({ error: `couldn't get an url for short url: ${short_url}` });
 
   return res.redirect(original_url);
 });
