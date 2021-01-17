@@ -19,7 +19,7 @@ const getAsync = promisify(db.get).bind(db);
 const setAsync = promisify(db.set).bind(db);
 
 // Basic Configuration
-const port = process.env.EXPRESS_PORT;
+const port = process.env.PORT || 3000;
 
 app.use(cors({ optionsSuccessStatus: 200 }));
 app.use(bodyParser.urlencoded({ extended: true }));
